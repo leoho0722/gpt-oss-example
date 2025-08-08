@@ -64,6 +64,13 @@ def parse_args():
         help="The temperature to use for the example.",
     )
     parser.add_argument(
+        "--reasoning-effort",
+        type=str,
+        default="medium",
+        choices=["low", "medium", "high"],
+        help="The reasoning effort to use for the example.",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         default=False,
@@ -82,6 +89,7 @@ def main(args: argparse.Namespace):
     ollama_turbo_apikey: str = args.ollama_turbo_apikey
     context_length: int = args.context_length
     temperature: float = args.temperature
+    reasoning_effort: str = args.reasoning_effort
     verbose: bool = args.verbose
 
     if verbose:
@@ -96,6 +104,7 @@ def main(args: argparse.Namespace):
         ) if backend == "ollama-turbo" else None
         print(f"Context Length: {context_length}")
         print(f"Temperature: {temperature}")
+        print(f"Reasoning Effort: {reasoning_effort}")
 
     if prompt_filepath:
         prompt_file_content: str = read_prompt_file(prompt_filepath)
@@ -108,6 +117,7 @@ def main(args: argparse.Namespace):
         model_kwargs = {
             "context_length": context_length,
             "temperature": temperature,
+            "reasoning_effort": reasoning_effort,
         }
 
         asyncio.run(ollama_backend.generate(model, prompt, model_kwargs))
@@ -120,6 +130,7 @@ def main(args: argparse.Namespace):
         model_kwargs = {
             "context_length": context_length,
             "temperature": temperature,
+            "reasoning_effort": reasoning_effort,
         }
 
         asyncio.run(ollama_turbo_backend.generate(model, prompt, model_kwargs))

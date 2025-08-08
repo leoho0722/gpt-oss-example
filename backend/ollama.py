@@ -20,6 +20,7 @@ class OllamaBackend:
             model=model,
             prompt=prompt,
             stream=True,
+            think=model_kwargs.get("reasoning_effort", "medium"),
             keep_alive="0s",
             options=Options(
                 temperature=model_kwargs.get("temperature", 0.8),
