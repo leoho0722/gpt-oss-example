@@ -2,6 +2,7 @@ import argparse
 import asyncio
 
 from backend.ollama import OllamaBackend
+from backend.pytorch import PyTorchBackend
 from utils.prompt import read_prompt_file
 
 
@@ -105,6 +106,8 @@ def main(args: argparse.Namespace):
         print(f"Context Length: {context_length}")
         print(f"Temperature: {temperature}")
         print(f"Reasoning Effort: {reasoning_effort}")
+        print(f"Verbose: {verbose}")
+        print()
 
     if prompt_filepath:
         prompt_file_content: str = read_prompt_file(prompt_filepath)
@@ -134,6 +137,16 @@ def main(args: argparse.Namespace):
         }
 
         asyncio.run(ollama_turbo_backend.generate(model, prompt, model_kwargs))
+
+    if backend == "pytorch":
+        pytorch_backend = PyTorchBackend()
+        model_kwargs = {
+            "context_length": context_length,
+            "temperature": temperature,
+            "reasoning_effort": reasoning_effort,
+        }
+
+        asyncio.run(pytorch_backend.generate(model, prompt, model_kwargs))
 
 
 if __name__ == "__main__":
